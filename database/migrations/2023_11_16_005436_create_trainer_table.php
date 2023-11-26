@@ -14,6 +14,8 @@ return new class extends Migration {
     {
         Schema::create('trainer', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('id_jadwal');
+            $table->foreign('id_user')->references('id')->on('jadwal');
             $table->string('nama_trainer');
             $table->integer('gaji');
             $table->string('email');

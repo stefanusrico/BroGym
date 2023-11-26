@@ -13,9 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('pembayaran', function (Blueprint $table) {
-            $table->id();
-
-
+            $table->id('id_pembayaran');
             $table->unsignedBigInteger('id_user');
             $table->integer('harga');
             $table->date('tanggal');

@@ -15,11 +15,12 @@ return new class extends Migration {
         Schema::create('laporan', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users');
+            $table->unsignedBigInteger('id_transaksi');
+            $table->foreign('id_transaksi')->references('id')->on('transaksi');
             $table->integer('harga_total');
             $table->date('tanggal');
             $table->timestamps();
-
-            $table->foreign('id_user')->references('id')->on('users');
         });
     }
 

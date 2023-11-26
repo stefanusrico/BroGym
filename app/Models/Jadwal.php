@@ -15,6 +15,9 @@ class Jadwal extends Model
     protected $fillable = [
         'id_user',
         'id_trainer',
+        'sesi',
+        'waktu_mulai',
+        'waktu_berakhir',
         'tanggal',
     ];
 

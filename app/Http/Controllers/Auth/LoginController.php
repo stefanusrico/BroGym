@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -26,7 +28,23 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'dashboard/admin';
+    protected $redirectTo = 'dashboard';
+
+    protected function authenticated(Request $request, $user)
+    {
+        // Check the user's role and redirect accordingly
+        if ($user->isAdmin()) {
+            return redirect()->route('home');
+        } elseif ($user->isUser()) {
+            return redirect()->route('homa');
+        }
+
+        // Add more role checks if needed
+
+        // If no specific role match, redirect to the default path
+        return redirect($this->redirectTo);
+    }
+
 
     /**
      * Create a new controller instance.
@@ -57,4 +75,6 @@ class LoginController extends Controller
     {
         return view('auth.login');
     }
+
+
 }

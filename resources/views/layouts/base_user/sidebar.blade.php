@@ -1,38 +1,24 @@
 @php
 $links = [
 [
-"href" => route('home'),
+"href" => route('homa'),
 "text" => "Dasboard",
 "icon" => "fas fa-home",
 "is_multi" => false
 ],
 [
-"text" => "Kelola Akun",
+"href" => route('membership.daftar'),
+"text" => "Membership",
 "icon" => "fas fa-users",
-"is_multi" => true,
-"href" => [
-[
-"section_text" => "Data Akun",
-"section_icon" => "far fa-circle",
-"section_href" => route('akun.index')
+"is_multi" => false
 ],
 [
-"section_text" => "Tambah Akun",
-"section_icon" => "far fa-circle",
-"section_href" => route('akun.add')
+"href" => route('akun.index'),
+"text" => "Trainer",
+"icon" => "fas fa-users",
+"is_multi" => false
 ],
-[
-"section_text" => "Membership",
-"section_icon" => "far fa-circle",
-"section_href" => route('membership.showdata')
-],
-[
-"section_text" => "Data Membership",
-"section_icon" => "far fa-circle",
-"section_href" => route('membership.datamember')
-],
-]
-]
+
 ];
 $navigation_links = json_decode(json_encode($links));
 @endphp

@@ -12,13 +12,17 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('membership', function (Blueprint $table) {
-            $table->id('id_member');
+        Schema::create('jadwal', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('status');
-            $table->date('tanggal_langganan');
-            $table->timestamps();
             $table->foreign('id_user')->references('id')->on('users');
+            $table->unsignedBigInteger('id_trainer');
+            $table->foreign('id_trainer')->references('id')->on('trainer');
+            $table->string('sesi');
+            $table->date('tanggal');
+            $table->time('waktu_mulai');
+            $table->time('waktu_berakhir');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +33,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('membership');
+        Schema::dropIfExists('jadwal');
     }
 };

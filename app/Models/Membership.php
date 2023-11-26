@@ -10,6 +10,7 @@ class Membership extends Model
 {
     use HasFactory;
 
+    protected $table = 'membership';
     protected $primaryKey = 'id_member';
     protected $fillable = ['id_user', 'status', 'tanggal_langganan'];
 

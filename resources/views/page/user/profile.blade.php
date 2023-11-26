@@ -1,4 +1,4 @@
-@extends('layouts.base_admin.base_dashboard') @section('judul', 'Halaman
+@extends('layouts.base_user.base_dashboard') @section('judul', 'Halaman
 Profil') @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -12,7 +12,7 @@ Profil') @section('content')
           <li class="breadcrumb-item">
             <a href="{{route('home')}}">Beranda</a>
           </li>
-          <li class="breadcrumb-item active">Profilea</li>
+          <li class="breadcrumb-item active">Profilex</li>
         </ol>
       </div>
     </div>

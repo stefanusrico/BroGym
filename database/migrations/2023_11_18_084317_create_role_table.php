@@ -12,13 +12,10 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('membership', function (Blueprint $table) {
-            $table->id('id_member');
-            $table->unsignedBigInteger('id_user');
-            $table->string('status');
-            $table->date('tanggal_langganan');
+        Schema::create('role', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('users');
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('membership');
+        Schema::dropIfExists('role');
     }
 };

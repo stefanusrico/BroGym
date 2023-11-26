@@ -12,13 +12,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('membership', function (Blueprint $table) {
-            $table->id('id_member');
+        Schema::create('transaksi', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('status');
-            $table->date('tanggal_langganan');
+            $table->foreign('id_user')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('nama_transaksi');
+            $table->double('harga');
+            $table->date('tanggal');
             $table->timestamps();
-            $table->foreign('id_user')->references('id')->on('users');
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('membership');
+        Schema::dropIfExists('transaksi');
     }
 };

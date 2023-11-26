@@ -2,37 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
-class HomeController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        return view('page.user.home');
+    }
+
+    public function dashboard()
+    {
+        $user = auth()->user();
+
+        return view('page.user.home', compact('user'));
     }
 
     public function profile()
     {
-        return view('page.admin.profile');
+        return view('page.user.profile');
     }
 
     public function updateprofile(Request $request)
@@ -70,5 +62,25 @@ class HomeController extends Controller
             ]);
             return redirect()->route('profile')->with('status', 'Perubahan telah tersimpan');
         }
+    }
+
+    public function berlangganan(Request $request)
+    {
+        $user = auth()->user();
+
+        // Lakukan validasi atau logika lainnya sesuai kebutuhan
+
+        // Tentukan harga berlangganan (gantilah dengan logika atau nilai yang sesuai)
+        $hargaLangganan = 100; // Ganti dengan nilai atau logika yang sesuai
+
+        // Simpan data pembayaran ke tabel pembayaran
+        $user->pembayaran()->create([
+            'harga' => $hargaLangganan,
+            'tanggal' => now(),
+        ]);
+
+        // Tambahkan logika lainnya, seperti memberikan notifikasi atau mengarahkan ke halaman tertentu
+
+        return redirect()->route('homa')->with('status', 'Berlangganan berhasil');
     }
 }
