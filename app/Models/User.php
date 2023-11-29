@@ -57,6 +57,12 @@ class User extends Authenticatable
         return $this->hasMany(Pembayaran::class, 'id_user');
     }
 
+    public function membership()
+    {
+        return $this->hasOne(Membership::class, 'id_user');
+    }
+
+
     public function isAdmin()
     {
         return $this->role === 'admin';

@@ -47,6 +47,21 @@
       </div>
     </div>
     <div class="card-body p-0" style="margin: 20px">
+      <div class="btn-group mb-2">
+        <a href="{{ route('akun.export') }}" class="btn btn-success">
+          <i class="fas fa-file-excel"></i> Export Excel
+        </a>
+      </div>
+      <div>
+        <form action="{{ route('akun.import') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="form-group">
+            <label for="file">Import Excel</label>
+            <input type="file" name="file" id="file" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Import</button>
+        </form>
+      </div>
       <table id="previewAkun" class="table table-striped table-bordered display" style="width:100%">
         <thead>
           <tr>

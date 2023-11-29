@@ -35,7 +35,7 @@ $links = [
 [
 "section_text" => "Data Membership",
 "section_icon" => "far fa-circle",
-"section_href" => route('membership.datamember')
+"section_href" => route('membership.index')
 ],
 ]
 ]

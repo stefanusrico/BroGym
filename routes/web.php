@@ -52,28 +52,30 @@ Route::group(['prefix' => 'dashboard/admin', 'middleware' => 'auth'], function (
             Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
         });
 
-    // Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
-
-    // });
-
     Route::controller(AkunController::class)
         ->prefix('akun')
         ->as('akun.')
         ->group(function () {
             Route::get('/', 'index')->name('index');
+            // Route::post('showdata', 'dataTable')->name('dataTable');
             Route::post('showdata', 'dataTable')->name('dataTable');
             Route::match(['get', 'post'], 'tambah', 'tambahAkun')->name('add');
             Route::match(['get', 'post'], '{id}/ubah', 'ubahAkun')->name('edit');
             Route::delete('{id}/hapus', 'hapusAkun')->name('delete');
+            Route::get('/akun/export', [AkunController::class, 'export'])->name('export');
+            Route::post('/akun/import', [AkunController::class, 'import'])->name('import');
         });
 
     Route::controller(MembershipController::class)
         ->prefix('membership')
         ->as('membership.')
         ->group(function () {
+            Route::get('/', 'index')->name('index');
             Route::get('/showdata', [MembershipController::class, 'showdata'])->name('showdata');
             Route::post('/store', [MembershipController::class, 'store'])->name('store');
-            Route::get('/datamember', [MembershipController::class, 'getDataMember'])->name('datamember');
+            Route::post('showdata', 'getDataMember')->name('getDataMember');
+            Route::match(['get', 'post'], '{id}/ubah', 'ubahStatus')->name('edit');
+            Route::match(['get', 'delete'], '{id}/hapus', 'hapusMember')->name('delete');
         });
 });
 
@@ -94,6 +96,7 @@ Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function ()
             // Route::match(['get', 'post'], 'tambah', 'tambahAkun')->name('add');
             // Route::match(['get', 'post'], '{id}/ubah', 'ubahAkun')->name('edit');
             // Route::delete('{id}/hapus', 'hapusAkun')->name('delete');
+    
         });
 
     Route::controller(MembershipController::class)
@@ -101,7 +104,5 @@ Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function ()
         ->as('membership.')
         ->group(function () {
             Route::get('/daftar', [MembershipController::class, 'daftar'])->name('daftar');
-            // Route::get('/showdata', [MembershipController::class, 'showdata'])->name('showdata');
-            // Route::post('/store', [MembershipController::class, 'store'])->name('store');
         });
 });

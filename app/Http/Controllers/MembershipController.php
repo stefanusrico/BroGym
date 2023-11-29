@@ -4,22 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use App\Models\User;
-use App\Models\Pembayaran;
 use App\Models\Membership;
-// use App\Http\Controllers\DataTables;
-use Yajra\DataTables\DataTables;
-
-// use DataTables;
+// use Yajra\DataTables\Facades\DataTables;
+use DataTables;
 
 
 class MembershipController extends Controller
 {
+    public function index()
+    {
+        return view('page.admin.member.datamember');
+    }
     public function showdata()
     {
         $usersWithPayments = User::has('pembayaran')->get();
-        return view('page.admin.member.index', compact('usersWithPayments'));
+        $filteredUsers = $usersWithPayments->filter(function ($user) {
+            return !$user->membership;
+        });
+        return view('page.admin.member.index', compact('filteredUsers'));
     }
 
     public function daftar()
@@ -29,19 +32,18 @@ class MembershipController extends Controller
 
     public function getDataMember(Request $request)
     {
-
-        if ($request->ajax()) {
-            $members = Membership::select(['id_member', 'id_user', 'status', 'tanggal_langganan'])->get();
-            \Log::info('testajg:', $members);
-            dd('babikk', $members);
+        if ($request->ajax() && $request->isMethod('post')) {
+            $members = Membership::select(['id', 'id_user', 'status', 'tanggal_langganan'])->get();
 
             return DataTables::of($members)
                 ->addColumn('user_name', function ($member) {
                     return $member->user->name ?? '';
                 })
                 ->addColumn('action', function ($member) {
-                    return '<a href="/membership/' . $member->id_member . '/edit" class="btn btn-primary">Edit</a>
-                    <a href="/membership/' . $member->id_member . '" class="btn btn-danger">Hapus</a>';
+                    $url = route('membership.edit', ['id' => $member->id]);
+                    $urlHapus = route('membership.delete', $member->id);
+                    return '<a href="' . $url . '" class="btn btn-primary">Edit</a>
+                    <a href="' . $urlHapus . '" class="btn btn-danger">Hapus</a>';
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -50,34 +52,29 @@ class MembershipController extends Controller
         return view('page.admin.member.datamember');
     }
 
+
     public function store(Request $request)
     {
-        // Validation rules
         $this->validate($request, [
             'id_user' => 'required|exists:users,id',
             'harga' => 'required|numeric',
             'tanggal' => 'required|date',
         ]);
 
-        // Find the existing user
         $user = User::findOrFail($request->id_user);
 
         // Perform the operation within a transaction
         DB::transaction(function () use ($user, $request) {
-            // Check if the user already has a membership
             if ($user->membership) {
                 return redirect()->route('membership.showdata')->with('error', 'User already has a membership.');
             }
 
-            // Check if the user has made a payment
             if (!$user->pembayaran()->exists()) {
                 return redirect()->route('membership.showdata')->with('error', 'User has not made a payment.');
             }
 
-            // Get the latest payment record for the user
             $latestPayment = $user->pembayaran()->latest()->first();
 
-            // Create a new membership for the user
             $membership = Membership::create([
                 'id_user' => $user->id,
                 'status' => 'aktif',
@@ -88,5 +85,36 @@ class MembershipController extends Controller
         return redirect()->route('membership.showdata')->with('success', 'Membership berhasil dibuat');
     }
 
+    public function edit($id)
+    {
+        $membership = Membership::findOrFail($id);
+        return view('page.admin.member.edit', compact('membership'));
+    }
 
+    public function ubahStatus(Request $request, $id)
+    {
+        $membership = Membership::findOrFail($id);
+        if ($request->isMethod('post')) {
+            $this->validate($request, [
+                'status' => 'required|in:aktif,nonaktif', // Assuming the status can only be 'aktif' or 'nonaktif'
+            ]);
+
+            // Update the status
+            $membership->status = $request->status;
+            $membership->save();
+            return redirect()->route('membership.index', ['id' => $membership->id])->with('success', 'Status berhasil diubah');
+        }
+
+        return view('page.admin.member.edit', [
+            'membership' => $membership
+        ]);
+    }
+
+    public function hapusMember($id)
+    {
+        $membership = Membership::findOrFail($id);
+        $membership->delete();
+
+        return redirect()->route('membership.index', ['id' => $membership->id])->with('success', 'Data berhasil dihapus');
+    }
 }

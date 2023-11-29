@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
+use App\Imports\UsersImport;
 
 class AkunController extends Controller
 {
@@ -19,6 +22,7 @@ class AkunController extends Controller
     public function dataTable(Request $request)
     {
         if ($request->ajax()) {
+            \Log::info('masuk bejir:');
             $data = User::where('id', '!=', Auth::id())->get();
 
             return DataTables::of($data)
@@ -33,6 +37,7 @@ class AkunController extends Controller
                 })
                 ->rawColumns(['user_image', 'options'])
                 ->make(true);
+
         }
 
         return view('page.admin.akun.index');
@@ -121,4 +126,21 @@ class AkunController extends Controller
             'msg' => 'Data yang dipilih telah dihapus'
         ]);
     }
+
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return redirect()->route('akun.index')->with('status', 'Data berhasil diimport');
+    }
+
 }
