@@ -12,13 +12,11 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('membership', function (Blueprint $table) {
-            $table->id('id_member');
+        Schema::create('pembayaran', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->string('status');
-            $table->date('tanggal_langganan');
-            $table->timestamps();
             $table->foreign('id_user')->references('id')->on('users');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('membership');
+        Schema::dropIfExists('pembayaran');
     }
 };

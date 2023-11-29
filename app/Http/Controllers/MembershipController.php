@@ -37,7 +37,7 @@ class MembershipController extends Controller
 
             return DataTables::of($members)
                 ->addColumn('user_name', function ($member) {
-                    return $member->user->name ?? ''; // Use null coalescing operator to handle cases where user is null
+                    return $member->user->name ?? '';
                 })
                 ->addColumn('action', function ($member) {
                     return '<a href="/membership/' . $member->id_member . '/edit" class="btn btn-primary">Edit</a>
