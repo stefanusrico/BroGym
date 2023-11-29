@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
+            $table->double('harga');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }
