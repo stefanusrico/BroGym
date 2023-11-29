@@ -14,9 +14,10 @@ return new class extends Migration {
     {
         Schema::create('trainer', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->string('nama_trainer');
             $table->double('gaji');
+            $table->string('email');
+            $table->string('password');
             $table->timestamps();
         });
     }

@@ -7,6 +7,12 @@ $links = [
 "is_multi" => false
 ],
 [
+"href" => route('roles.index'),
+"text" => "Tambah Role",
+"icon" => "fas fa-users",
+"is_multi" => false
+],
+[
 "text" => "Kelola Akun",
 "icon" => "fas fa-users",
 "is_multi" => true,

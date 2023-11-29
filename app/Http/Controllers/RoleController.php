@@ -29,7 +29,7 @@ class RoleController extends Controller
             'name' => $request->input('name'),
         ]);
 
-        return redirect()->route('auth.roles.index')->with('success', 'Role created successfully.');
+        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
     }
 
     public function edit(Role $role)
