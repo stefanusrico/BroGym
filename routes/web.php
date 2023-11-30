@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AkunController;
+use App\Http\Controllers\TrainerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -77,6 +78,18 @@ Route::group(['prefix' => 'dashboard/admin', 'middleware' => 'auth'], function (
             Route::match(['get', 'post'], '{id}/ubah', 'ubahStatus')->name('edit');
             Route::match(['get', 'delete'], '{id}/hapus', 'hapusMember')->name('delete');
         });
+
+    Route::controller(TrainerController::class)
+        ->prefix('trainers')
+        ->as('trainers.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/showdata', [TrainerController::class, 'showdata'])->name('showdata');
+
+            Route::post('showdata', 'getDataTrainer')->name('getDataTrainer');
+            Route::match(['get', 'post'], '{id}/ubah', 'ubahStatus')->name('edit');
+            Route::match(['get', 'delete'], '{id}/hapus', 'hapusMember')->name('delete');
+        });
 });
 
 Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function () {
@@ -96,7 +109,7 @@ Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function ()
             // Route::match(['get', 'post'], 'tambah', 'tambahAkun')->name('add');
             // Route::match(['get', 'post'], '{id}/ubah', 'ubahAkun')->name('edit');
             // Route::delete('{id}/hapus', 'hapusAkun')->name('delete');
-    
+
         });
 
     Route::controller(MembershipController::class)
