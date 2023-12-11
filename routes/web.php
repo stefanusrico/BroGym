@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CekRole;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function () {
     // Add more routes based on roles
 });
 
-Route::group(['prefix' => 'dashboard/admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'dashboard/admin', 'middleware' => ['auth', 'cekrole:admin']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::group(['prefix' => 'profile'], function () {
@@ -92,7 +93,7 @@ Route::group(['prefix' => 'dashboard/admin', 'middleware' => 'auth'], function (
         });
 });
 
-Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'dashboard/user', 'middleware' => ['auth', 'cekrole:user']], function () {
     Route::get('/', [UserController::class, 'index'])->name('homa');
 
     Route::group(['prefix' => 'profile'], function () {
@@ -109,7 +110,7 @@ Route::group(['prefix' => 'dashboard/user', 'middleware' => 'auth'], function ()
             // Route::match(['get', 'post'], 'tambah', 'tambahAkun')->name('add');
             // Route::match(['get', 'post'], '{id}/ubah', 'ubahAkun')->name('edit');
             // Route::delete('{id}/hapus', 'hapusAkun')->name('delete');
-
+    
         });
 
     Route::controller(MembershipController::class)

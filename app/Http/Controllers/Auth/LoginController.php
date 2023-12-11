@@ -38,10 +38,6 @@ class LoginController extends Controller
         } elseif ($user->isUser()) {
             return redirect()->route('homa');
         }
-
-        // Add more role checks if needed
-
-        // If no specific role match, redirect to the default path
         return redirect($this->redirectTo);
     }
 
