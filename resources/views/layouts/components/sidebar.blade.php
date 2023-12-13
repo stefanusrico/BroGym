@@ -27,13 +27,20 @@ $links = [
 "section_icon" => "far fa-circle",
 "section_href" => route('akun.add')
 ],
+]
+],
 [
-"section_text" => "Membership",
+"text" => "Kelola Member",
+"icon" => "fas fa-users",
+"is_multi" => true,
+"href" => [
+[
+"section_text" => "Request Membership",
 "section_icon" => "far fa-circle",
 "section_href" => route('membership.showdata')
 ],
 [
-"section_text" => "Data Membership",
+"section_text" => "Data Member",
 "section_icon" => "far fa-circle",
 "section_href" => route('membership.index')
 ],
