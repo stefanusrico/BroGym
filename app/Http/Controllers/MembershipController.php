@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use DataTables;
 use Illuminate\Support\Carbon;
 use App\Models\Pembayaran;
+use App\Models\Transaksi;
 class MembershipController extends Controller
 {
     public function index()
@@ -46,11 +47,11 @@ class MembershipController extends Controller
 
             $formattedTanggalKadaluarsa = $tanggalKadaluarsa ? $tanggalKadaluarsa->formatLocalized('%d-%B-%Y') : null;
 
-            return view('page.user.membership.daftar', compact('statusMember', 'tanggalLangganan','formattedTanggalKadaluarsa'));
+            return view('page.user.membership.daftar', compact('user_id','statusMember', 'tanggalLangganan','formattedTanggalKadaluarsa'));
         }
 
         else{
-            return view('page.user.membership.daftar', compact('statusMember'));
+            return view('page.user.membership.daftar', compact('user_id','statusMember'));
         }
         }
 
@@ -83,36 +84,56 @@ class MembershipController extends Controller
 
 
     public function store(Request $request)
-    {
-        $this->validate($request, [
-            'id_user' => 'required|exists:users,id',
-            'harga' => 'required|numeric',
-            'tanggal' => 'required|date',
+{
+    $this->validate($request, [
+        'id_user' => 'required|exists:users,id',
+    ]);
+
+    $user = User::findOrFail($request->id_user);
+    $pembayaran = Pembayaran::findOrFail($request->id_pembayaran);
+
+    // Perform the operation within a transaction
+
+
+
+        if ($user->membership) {
+            return redirect()->route('membership.showdata')->with('error', 'User already has a membership.');
+        }
+
+        if (!$user->pembayaran()->exists()) {
+            return redirect()->route('membership.showdata')->with('error', 'User has not made a payment.');
+        }
+
+        // Create a membership record
+        Membership::create([
+            'id_user' => $user->id,
+            'status' => 'aktif',
+            'tanggal_langganan' => now(),
         ]);
 
-        $user = User::findOrFail($request->id_user);
+        // Copy payment data to transaction table
 
-        // Perform the operation within a transaction
-        DB::transaction(function () use ($user, $request) {
-            if ($user->membership) {
-                return redirect()->route('membership.showdata')->with('error', 'User already has a membership.');
-            }
+        Transaksi::create([
+            'id_user' => $user->id,
+            'nama_transaksi' => 'Membership Payment',
+            'harga' => $pembayaran->harga, // Update the price accordingly
+            'tanggal' => $pembayaran->created_at,
+        ]);
 
-            if (!$user->pembayaran()->exists()) {
-                return redirect()->route('membership.showdata')->with('error', 'User has not made a payment.');
-            }
+        // Move payment data to transaksi table and delete the payment record
 
-            $latestPayment = $user->pembayaran()->latest()->first();
 
-            $membership = Membership::create([
-                'id_user' => $user->id,
-                'status' => 'aktif',
-                'tanggal_langganan' => $latestPayment->tanggal,
-            ]);
-        });
+
+
+        // Delete the payment record
+        $pembayaran->delete();
+
+
 
         return redirect()->route('membership.showdata')->with('success', 'Membership berhasil dibuat');
-    }
+
+
+}
 
     public function edit($id)
     {

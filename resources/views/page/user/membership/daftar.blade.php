@@ -66,7 +66,7 @@
                   </div>
               </div>
               <!-- Tambahkan input hidden untuk menyimpan ID pengguna -->
-              <input type="hidden" id="id_user" name="id_user" value="{{ $user->id }}">
+              <input type="hidden" id="id_user" name="id_user" value="{{ $user_id }}">
           </div>
           <!-- Tambahkan input hidden untuk menyimpan membership_id -->
           <input type="hidden" id="membership_id_hidden" name="membership_id" value="1">

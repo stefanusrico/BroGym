@@ -20,14 +20,13 @@
       <tr>
         <td>{{ $user->user->id }}</td>
         <td>{{ $user->user->name }}</td>
-        <td>{{ $user->user->email }}</td>
+        <td>{{ $user->user->email }} </td>
         <td>
           @if (!$user->membership)
           <form action="{{ route('membership.store') }}" method="POST">
             @csrf
-            <input type="hidden" name="id_user" value="{{ $user->id }}">
-            <input type="hidden" name="harga" value="5000">
-            <input type="hidden" name="tanggal" value='2023-11-16'>
+            <input type="hidden" name="id_user" value="{{ $user->user->id }}">
+            <input type="hidden" name="id_pembayaran" value="{{ $user->id }}">
             <button type="submit" class="btn btn-success">Add Membership</button>
           </form>
           @else
