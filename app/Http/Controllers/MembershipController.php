@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 // use Yajra\DataTables\Facades\DataTables;
 use DataTables;
 use Illuminate\Support\Carbon;
-
+use App\Models\Pembayaran;
 class MembershipController extends Controller
 {
     public function index()
@@ -19,12 +19,11 @@ class MembershipController extends Controller
     }
     public function showdata()
     {
-        $usersWithPayments = User::has('pembayaran')->get();
-        $filteredUsers = $usersWithPayments->filter(function ($user) {
-            return !$user->membership;
-        });
+        $filteredUsers = Pembayaran::with('user')->get();
+
         return view('page.admin.member.index', compact('filteredUsers'));
     }
+
 
     public function daftar()
     {

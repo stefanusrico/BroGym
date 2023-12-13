@@ -46,34 +46,35 @@
 
   <div class="card">
     <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="membership_id" class="form-label">Pilih Keanggotaan</label>
-            <select class="form-control" id="membership_id" name="membership_id">
-              <option value="1" data-harga="100000">Membership 1 - Rp 100.000</option>
-              <!-- Tambahkan opsi lain sesuai kebutuhan -->
-            </select>
-          </div>
-        </div>
-        <!-- Tambahkan input file untuk bukti pembayaran -->
-        <div class="col-md-6">
-          <div class="mb-3">
-            <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran</label>
-            <input type="file" name="bukti_pembayaran" class="form-control">
-          </div>
-        </div>
-      </div>
       <form action="{{ route('user.pembayaran') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        <!-- Tambahkan input hidden untuk menyimpan harga -->
-        <input type="hidden" id="harga" name="harga" value="">
-        <!-- Tambahkan input hidden untuk menyimpan membership_id -->
-        <input type="hidden" id="membership_id_hidden" name="membership_id" value="1">
-        <button type="submit" class="btn btn-success">Berlangganan</button>
+          @csrf
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="membership_id" class="form-label">Pilih Keanggotaan</label>
+                      <select class="form-control" id="membership_id" name="membership_id">
+                          <option value="1" data-harga="100000">Membership 1 - Rp 100.000</option>
+                          <!-- Tambahkan opsi lain sesuai kebutuhan -->
+                      </select>
+                  </div>
+              </div>
+              <!-- Tambahkan input file untuk bukti pembayaran -->
+              <div class="col-md-6">
+                  <div class="mb-3">
+                      <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran</label>
+                      <input type="file" name="bukti_pembayaran" class="form-control">
+                  </div>
+              </div>
+              <!-- Tambahkan input hidden untuk menyimpan ID pengguna -->
+              <input type="hidden" id="id_user" name="id_user" value="{{ $user->id }}">
+          </div>
+          <!-- Tambahkan input hidden untuk menyimpan membership_id -->
+          <input type="hidden" id="membership_id_hidden" name="membership_id" value="1">
+          <button type="submit" class="btn btn-success">Berlangganan</button>
       </form>
-    </div>
   </div>
+
+</div>
 
 
   @else

@@ -18,9 +18,9 @@
     <tbody>
       @foreach ($filteredUsers as $user)
       <tr>
-        <td>{{ $user->id }}</td>
-        <td>{{ $user->name }}</td>
-        <td>{{ $user->email }}</td>
+        <td>{{ $user->user->id }}</td>
+        <td>{{ $user->user->name }}</td>
+        <td>{{ $user->user->email }}</td>
         <td>
           @if (!$user->membership)
           <form action="{{ route('membership.store') }}" method="POST">

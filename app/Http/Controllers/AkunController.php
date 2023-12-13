@@ -22,7 +22,7 @@ class AkunController extends Controller
     public function dataTable(Request $request)
     {
         if ($request->ajax()) {
-            \Log::info('masuk bejir:');
+
             $data = User::where('id', '!=', Auth::id())->get();
 
             return DataTables::of($data)
