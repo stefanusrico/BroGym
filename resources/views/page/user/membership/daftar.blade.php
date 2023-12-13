@@ -23,7 +23,27 @@
 
 <!-- Main content -->
 <section class="content">
-  <!-- Tambahkan formulir berlangganan di sini -->
+    <!--=======================================================================================-->
+  @if($statusMember == 0)
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="membership_id" class="form-label">Status Membership</label>
+            <select class="form-control" id="membership_id" name="membership_id" disabled>
+
+              <option value="{{ $statusMember }}">{{ $statusMember == 1 ? 'Member' : 'NonMember' }}</option>
+              <!-- Tambahkan opsi lain sesuai kebutuhan -->
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-body">
       <div class="row">
@@ -36,15 +56,51 @@
             </select>
           </div>
         </div>
-        <input type="hidden" id="harga" name="harga" value="">
+        <!-- Tambahkan input file untuk bukti pembayaran -->
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="bukti_pembayaran" class="form-label">Bukti Pembayaran</label>
+            <input type="file" name="bukti_pembayaran" class="form-control">
+          </div>
+        </div>
       </div>
-      <form action="{{ route('user.pembayaran') }}" method="post">
+      <form action="{{ route('user.pembayaran') }}" method="post" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="membership_id" value="1"> <!-- Nilai default, sesuaikan dengan kebutuhan -->
+        <!-- Tambahkan input hidden untuk menyimpan harga -->
+        <input type="hidden" id="harga" name="harga" value="">
+        <!-- Tambahkan input hidden untuk menyimpan membership_id -->
+        <input type="hidden" id="membership_id_hidden" name="membership_id" value="1">
         <button type="submit" class="btn btn-success">Berlangganan</button>
       </form>
     </div>
   </div>
+  @else
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="membership_id" class="form-label">Status Membership</label>
+            <select class="form-control" id="membership_id" name="membership_id" disabled>
+
+              <option value="{{ $statusMember }}">{{ $statusMember == 1 ? 'Member' : 'NonMember' }}</option>
+              <!-- Tambahkan opsi lain sesuai kebutuhan -->
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  @endif
+
+
+
+
+  <!--=======================================================================================-->
+  <!-- Tambahkan formulir berlangganan hanya jika status member adalah NonMember -->
+
 </section>
 <!-- /.content -->
 @endsection

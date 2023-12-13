@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Membership;
+use Illuminate\Support\Facades\Auth;
 // use Yajra\DataTables\Facades\DataTables;
 use DataTables;
 
@@ -27,7 +28,15 @@ class MembershipController extends Controller
 
     public function daftar()
     {
-        return view('page.user.membership.daftar');
+        $user_id = Auth::id();
+
+        // Check if there is a membership record for the user
+        $membership = Membership::where('id_user', $user_id)->first();
+
+        // Determine the membership status
+        $statusMember = $membership ? 1 : 0;
+
+        return view('page.user.membership.daftar', compact('statusMember'));
     }
 
     public function getDataMember(Request $request)

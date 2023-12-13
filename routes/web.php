@@ -110,7 +110,7 @@ Route::group(['prefix' => 'dashboard/user', 'middleware' => ['auth', 'cekrole:us
             // Route::match(['get', 'post'], 'tambah', 'tambahAkun')->name('add');
             // Route::match(['get', 'post'], '{id}/ubah', 'ubahAkun')->name('edit');
             // Route::delete('{id}/hapus', 'hapusAkun')->name('delete');
-    
+
         });
 
     Route::controller(MembershipController::class)
