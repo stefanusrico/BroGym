@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function pembayaran()
     {
-        return $this->hasMany(Pembayaran::class, 'id_user');
+        return $this->hasOne(Pembayaran::class, 'id_user');
     }
 
     public function membership()

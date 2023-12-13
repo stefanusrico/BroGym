@@ -65,40 +65,38 @@ class UserController extends Controller
     }
 
     public function berlangganan(Request $request)
-{
-    $user = auth()->user();
+    {
+        $user = auth()->user();
 
-    // Validasi input form, sesuaikan dengan kebutuhan Anda
-    $request->validate([
-        'membership_id' => 'required|numeric',
-        'bukti_pembayaran' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png',
-    ]);
+        // Validasi input form, sesuaikan dengan kebutuhan Anda
+        $request->validate([
+            'membership_id' => 'required|numeric',
+            'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png',
+        ]);
 
-    // Tentukan harga berlangganan (gantilah dengan logika atau nilai yang sesuai)
-    $hargaLangganan = 100; // Ganti dengan nilai atau logika yang sesuai
-    $file = $request->file('bukti_pembayaran');
-    $fileName = $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+        // Tentukan harga berlangganan (gantilah dengan logika atau nilai yang sesuai)
+        $hargaLangganan = 100000; // Ganti dengan nilai atau logika yang sesuai
+        $file = $request->file('bukti_pembayaran');
+        $fileName = $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
 
-    // Simpan file ke direktori yang diinginkan
-    $file->storeAs('bukti_pembayaran', $fileName);
+        // Simpan file ke direktori yang diinginkan dengan menggunakan storeAs
+        $file->storeAs('public/pembayaran/bukti_pembayaran', $fileName);
 
-    // Simpan nama file ke dalam database
+        // Simpan nama file ke dalam database
 
-    // Simpan data pembayaran ke tabel pembayaran
-    $pembayaran = $user->pembayaran()->create([
-        'harga' => $hargaLangganan,
-        'tanggal' => now(),
-        'bukti' => $fileName,
-    ]);
+        // Simpan data pembayaran ke tabel pembayaran
+        $pembayaran = $user->pembayaran()->create([
+            'harga' => $hargaLangganan,
+            'tanggal' => now(),
+            'bukti' => $fileName,
+        ]);
 
-    // Handle file bukti pembayaran
+        // Handle file bukti pembayaran
 
+        // Tambahkan logika lainnya, seperti memberikan notifikasi atau mengarahkan ke halaman tertentu
 
+        return redirect()->route('home')->with('status', 'Berlangganan berhasil');
+    }
 
-
-    // Tambahkan logika lainnya, seperti memberikan notifikasi atau mengarahkan ke halaman tertentu
-
-    return redirect()->route('home')->with('status', 'Berlangganan berhasil');
-}
 
 }
