@@ -74,6 +74,8 @@
       </form>
     </div>
   </div>
+
+
   @else
   <div class="card">
     <div class="card-body">
@@ -83,9 +85,12 @@
             <label for="membership_id" class="form-label">Status Membership</label>
             <select class="form-control" id="membership_id" name="membership_id" disabled>
 
+
               <option value="{{ $statusMember }}">{{ $statusMember == 1 ? 'Member' : 'NonMember' }}</option>
               <!-- Tambahkan opsi lain sesuai kebutuhan -->
             </select>
+            Tanggal Langganan : {{$tanggalLangganan}} <br>
+            Tanggal Berakhir  : {{$formattedTanggalKadaluarsa}}
           </div>
         </div>
 

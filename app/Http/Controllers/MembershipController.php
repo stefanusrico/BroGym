@@ -9,7 +9,7 @@ use App\Models\Membership;
 use Illuminate\Support\Facades\Auth;
 // use Yajra\DataTables\Facades\DataTables;
 use DataTables;
-
+use Illuminate\Support\Carbon;
 
 class MembershipController extends Controller
 {
@@ -35,9 +35,22 @@ class MembershipController extends Controller
 
         // Determine the membership status
         $statusMember = $membership ? 1 : 0;
+        $tanggalKadaluarsa = null;
 
-        return view('page.user.membership.daftar', compact('statusMember'));
+        // Jika keanggotaan ditemukan, tambahkan informasi tanggal_pembayaran + 30 hari
+        if ($membership) {
+            $tanggalLangganan = Carbon::parse($membership->tanggal_langganan);
+            $tanggalKadaluarsa = $tanggalLangganan->addDays(30);
+        }
+        $tl = Carbon::parse($membership->tanggal_langganan);
+        // Format tanggalKadaluarsa sesuai dengan format DD-Nama_bulan-YYYY
+        setlocale(LC_TIME, 'id_ID'); // Atur locale ke Bahasa Indonesia
+        $tanggalLangganan = $tl ? $tl->formatLocalized('%d-%B-%Y') : null;
+        $formattedTanggalKadaluarsa = $tanggalKadaluarsa ? $tanggalKadaluarsa->formatLocalized('%d-%B-%Y') : null;
+
+        return view('page.user.membership.daftar', compact('statusMember', 'tanggalLangganan','formattedTanggalKadaluarsa'));
     }
+
 
     public function getDataMember(Request $request)
     {
