@@ -41,15 +41,23 @@ class MembershipController extends Controller
         if ($membership) {
             $tanggalLangganan = Carbon::parse($membership->tanggal_langganan);
             $tanggalKadaluarsa = $tanggalLangganan->addDays(30);
-        }
-        $tl = Carbon::parse($membership->tanggal_langganan);
-        // Format tanggalKadaluarsa sesuai dengan format DD-Nama_bulan-YYYY
-        setlocale(LC_TIME, 'id_ID'); // Atur locale ke Bahasa Indonesia
-        $tanggalLangganan = $tl ? $tl->formatLocalized('%d-%B-%Y') : null;
-        $formattedTanggalKadaluarsa = $tanggalKadaluarsa ? $tanggalKadaluarsa->formatLocalized('%d-%B-%Y') : null;
+            $tl = Carbon::parse($membership->tanggal_langganan);
+            $tanggalLangganan = $tl ? $tl->formatLocalized('%d-%B-%Y') : null;
+            setlocale(LC_TIME, 'id_ID'); // Atur locale ke Bahasa Indonesia
 
-        return view('page.user.membership.daftar', compact('statusMember', 'tanggalLangganan','formattedTanggalKadaluarsa'));
-    }
+            $formattedTanggalKadaluarsa = $tanggalKadaluarsa ? $tanggalKadaluarsa->formatLocalized('%d-%B-%Y') : null;
+
+            return view('page.user.membership.daftar', compact('statusMember', 'tanggalLangganan','formattedTanggalKadaluarsa'));
+        }
+
+        else{
+            return view('page.user.membership.daftar', compact('statusMember'));
+        }
+        }
+
+
+
+
 
 
     public function getDataMember(Request $request)
